@@ -54,6 +54,7 @@ function create(){
   this.physics.add.collider(this.player, platforms)
 
   //здесь у нас будет работа с анимацией персонажа
+  
 
   //делаем управление с помошью стрелочек
   this.cursors = this.input.keyboard.createCursorKeys()
@@ -63,7 +64,64 @@ function create(){
     immovable: true
   })
 
+  const spikeObject = map.getObjectLayer('Spikes')['objects'];
+  spikeObject.forEach(spikeObject =>{
+
+    const spike = this.spikes.create(spikeObject.x, spikeObject.y + 200 - spikeObject.heigth, 'spike').setOrigin(0, 0)
+    spike.body.setSize(spike.width, spike.height - 20).setOffset(0, 20)
+  })
+
+  this.physics.add.collider(this.player, this.spikes, playerHit, null, this)
+
 }
+function update(){
+  if(this.cursors.left.isDown){
+    this.player.setVelocityX(-200)
+    if(this.player.body.onFloor()){
+      this.player.play('walk', true) 
+    }
+  } else if(this.cursors.right.isDown){
+    this.player.setVelocityX(200);
+    if(this.player.body.onFloor()){
+      this.player.play('walk', true)
+    }
+    } else{
+      //если нажаты какие-то другие кнопки, или другие не нажаты
+      this.player.setVelocityX(0);
+      if (this.player.body.onFloor()){
+        this.player.play('idle', true);
+      }
+    }
+
+
+    if((this.cursors.space.isDown || this.cursors.up.isDown ) && this.player.body.onFloor()){
+      this.player.setVelocityY(-350); // можно здесь ограничить высоту прыжка 
+      this.player('jump', true) // проигрывается анимация прыжка
+    }
+    // кроме прыжка, мы будем определять положение лица нашего главного героя
+
+    if(this.player.body.velocity > 0){
+      this.player.setFlip(false)
+    } else if(this.player.body.velocity.x < 0){
+      this.player.setFlipX(true)
+    }
+}
+
+function playerHit(player, spike){
+  player.setVelocity(0, 0) // обнуляем скорость после того, как вернули нашего игрока на изначальную позицию
+  player.setX(50)
+  player.setY(300)
+  player.play('idle', true) // проигрываем стандартную анимацию
+  player.setAlpha(0)
+  let tw = this.tween.add({
+    targets:player,
+    alpha: 1,
+    duration: 100,
+    ease: 'Linear',
+    repeat: 5,
+  })
+}
+
 
 
 
