@@ -56,7 +56,7 @@ function create(){
   //здесь у нас будет работа с анимацией персонажа
   this.anims.create({
     key: 'walk',
-    frames: this.anim.generateFrameNames('player',{
+    frames: this.anims.generateFrameNames('player',{
       prefix: 'robo_player_',
       start: 2,
       end: 3,
@@ -116,12 +116,13 @@ function update(){
 
     if((this.cursors.space.isDown || this.cursors.up.isDown ) && this.player.body.onFloor()){
       this.player.setVelocityY(-350); // можно здесь ограничить высоту прыжка 
-      this.player('jump', true) // проигрывается анимация прыжка
+      this.player.play('jump', true) // проигрывается анимация прыжка
     }
     // кроме прыжка, мы будем определять положение лица нашего главного героя
-
-    if(this.player.body.velocity > 0){
+    
+    if(this.player.body.velocity.x > 0){
       this.player.setFlip(false)
+
     } else if(this.player.body.velocity.x < 0){
       this.player.setFlipX(true)
     }
