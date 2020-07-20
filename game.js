@@ -48,13 +48,33 @@ function create(){
 
   //добавляем игрока в наш игровой мир
 
-  this.player = this.physics.add.sprite(50, 300, 'player')
+  this.player = this.physics.add.sprite(50, 300, 'player') //добавляется игрок
   this.player.setBounce(0.1)
-  this.play.setCollideWorldBounds(true);
+  this.player.setCollideWorldBounds(true);
   this.physics.add.collider(this.player, platforms)
 
   //здесь у нас будет работа с анимацией персонажа
-  
+  this.anims.create({
+    key: 'walk',
+    frames: this.anim.generateFrameNames('player',{
+      prefix: 'robo_player_',
+      start: 2,
+      end: 3,
+    }),
+    framesRate: 10,
+    repeat: -1
+  })
+
+  this.anims.create({
+    key: 'idle',
+    frames: [{key: 'player', frame: 'robo_player_0'}],
+    frameRate: 10, 
+  })
+  this.anims.create({
+    key: 'jump',
+    frames: [{key: 'player', frame: 'robo_player_1'}],
+    frameRate: 10, 
+  })
 
   //делаем управление с помошью стрелочек
   this.cursors = this.input.keyboard.createCursorKeys()
