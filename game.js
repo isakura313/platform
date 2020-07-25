@@ -150,11 +150,7 @@ function update() {
   }
 }
 
-/**
- * playerHit resets the player's state when it dies from colliding with a spike
- * @param {*} player - player sprite
- * @param {*} spike - spike player collided with
- */
+
 function playerHit(player, spike) {
   // Set velocity back to 0
   player.setVelocity(0, 0);
